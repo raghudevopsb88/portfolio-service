@@ -1,4 +1,4 @@
-FROM        dhi.io/gradle:9-jdk21-alpine3.23-dev AS builder
+FROM        docker.io/library/openjdk:21 AS builder
 WORKDIR     /app
 COPY        ./ /app/
 RUN         chmod +x ./gradlew && ./gradlew bootJar --no-daemon -x test
