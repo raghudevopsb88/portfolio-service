@@ -4,3 +4,8 @@ docker-build:
 	docker build -t 739561048503.dkr.ecr.us-east-1.amazonaws.com/portfolio-service:latest .
 	docker push 739561048503.dkr.ecr.us-east-1.amazonaws.com/portfolio-service:latest
 
+eks-deploy:
+	aws eks update-kubeconfig --name dev
+	helm upgrade -i portfolio-service helm -f helm/values/portfolio-service.yml
+
+
