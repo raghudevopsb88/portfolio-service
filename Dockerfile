@@ -17,3 +17,4 @@ FROM        docker.io/library/openjdk:21-ea
 COPY        --from=sonar-scanner /tmp/scan-success /tmp/
 COPY        --from=builder  /app/build/libs/*.jar portfolio-service.jar
 ENTRYPOINT  [ "java", "-jar", "./portfolio-service.jar" ]
+
