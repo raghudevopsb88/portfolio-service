@@ -1,6 +1,7 @@
 plugins {
     java
-    id("org.springframework.boot") version "3.4.5" // Upgraded from 3.4.3 to resolve CVE-2025-22235
+    // Native fix for CVE-2026-40973 & CVE-2025-41248, CVE-2025-41232, CVE-2025-41249
+    id("org.springframework.boot") version "3.4.16"
     id("io.spring.dependency-management") version "1.1.7"
 }
 
@@ -13,17 +14,16 @@ java {
     }
 }
 
-// Global properties overriding transitive dependencies across the project
-extra["tomcat.version"] = "10.1.53"           // Fixes CVE-2026-29145
-extra["postgresql.version"] = "42.7.7"       // Fixes CVE-2025-49146
+// Fixes for all listed 2026 flaws across downstream packages
+extra["tomcat.version"] = "10.1.55"           // Fixes CVE-2026-41293, CVE-2026-43512, CVE-2026-34483, CVE-2026-34487, CVE-2026-41284, CVE-2026-42498, CVE-2026-43513
+extra["postgresql.version"] = "42.7.11"       // Fixes CVE-2026-42198 (and legacy CVE-2025-49146)
 
 repositories {
     mavenCentral()
 }
 
 dependencies {
-    // Spring Boot Starter packs pull managed versions derived from plugin version 3.4.5
-    // This brings in Spring Framework 6.2.11+ and Spring Security 6.4.10+ (Fixes CVE-2025-41232, CVE-2025-41249)
+    // Spring Boot
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     implementation("org.springframework.boot:spring-boot-starter-validation")
@@ -36,7 +36,7 @@ dependencies {
     runtimeOnly("io.jsonwebtoken:jjwt-jackson:0.12.6")
 
     // Database
-    implementation("org.postgresql:postgresql") // Will resolve to 42.7.7 via the extra property
+    implementation("org.postgresql:postgresql") // Resolves to 42.7.11 via extra property override
     implementation("org.flywaydb:flyway-core")
     implementation("org.flywaydb:flyway-database-postgresql")
 
